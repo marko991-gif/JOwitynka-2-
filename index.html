@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walentynka 💖</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body, html {
+    width: 100%; height: 100%;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffccd9, #ffe6f0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #main-page, #second-page {
+    position: absolute;
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #second-page { display: none; background: linear-gradient(135deg, #ff99cc, #ff66aa); }
+
+  h1 {
+    color: #e60073;
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2.2em;
+    text-shadow: 1px 1px 2px #fff;
+  }
+
+  button {
+    padding: 20px 50px;
+    font-size: 24px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    transition: all 0.3s ease;
+  }
+
+  #noBtn { background: #ff3366; color: white; }
+  #yesBtn { background: #ff99cc; color: white; opacity: 0.05; font-size: 20px; }
+
+  #second-page h1 { font-size: 2.5em; margin-bottom: 30px; text-align:center; }
+  #second-page img { width: 300px; max-width: 80%; border-radius:12px; }
+
+  /* animowane serduszka w tle */
+  .heart {
+    position: absolute;
+    width: 20px; height: 20px;
+    background: red;
+    transform: rotate(45deg);
+    animation: floatUp 4s linear infinite;
+  }
+  .heart:before, .heart:after {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    background: red;
+    border-radius: 50%;
+  }
+  .heart:before { top: -10px; left:0; }
+  .heart:after { left:10px; top:0; }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(45deg); opacity: 1; }
+    100% { transform: translateY(-100px) rotate(45deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="main-page">
+  <h1>Chcesz zostać moją Walentynką? 💖</h1>
+  <button id="yesBtn">Tak</button>
+  <button id="noBtn">Nie</button>
+</div>
+
+<div id="second-page">
+  <h1>Tak! 💖 Jesteś moją Walentynką!</h1>
+  <img src="https://media.giphy.com/media/3oz8xKaR836UJOYeOc/giphy.gif" alt="Buziaki i kwiatki">
+</div>
+
+<audio id="kissSound" src="https://www.soundjay.com/human/sounds/kiss-01.mp3" preload="auto"></audio>
+
+<script>
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const mainPage = document.getElementById('main-page');
+const secondPage = document.getElementById('second-page');
+const kissSound = document.getElementById('kissSound');
+
+let yesScale = 1;
+
+// funkcja generująca serduszka
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  const size = 10 + Math.random()*20;
+  heart.style.width = heart.style.height = size + 'px';
+  heart.style.animationDuration = (3 + Math.random()*2) + 's';
+  heart.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 4000);
+}
+
+// generujemy serduszka co 150ms
+setInterval(createHeart, 150);
+
+// kliknięcie "Nie"
+noBtn.addEventListener('click', () => {
+  yesScale *= 4;
+  yesBtn.style.transform = `scale(${yesScale})`;
+});
+
+// kliknięcie "Tak"
+yesBtn.addEventListener('click', () => {
+  kissSound.play();
+
+  // powiększamy przycisk do 60% planszy
+  const targetWidth = window.innerWidth * 0.6;
+  const targetHeight = window.innerHeight * 0.6;
+
+  yesBtn.style.transition = 'all 1s ease';
+  yesBtn.style.width = targetWidth + 'px';
+  yesBtn.style.height = targetHeight + 'px';
+  yesBtn.style.fontSize = '3em';
+  yesBtn.style.opacity = 1;
+
+  setTimeout(() => {
+    mainPage.style.display = 'none';
+    secondPage.style.display = 'flex';
+  }, 1200);
+});
+</script>
+
+</body>
+</html>
